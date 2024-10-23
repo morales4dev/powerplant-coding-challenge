@@ -7,23 +7,27 @@
 
 
 """
-
 import logging
-from typing import List
 
-from fastapi import HTTPException
+from fastapi import HTTPException, APIRouter, Depends
 
 from config.constants import BS_CORRELATION_LOGGER
 from config.traceability import generate_correlation_id
 from models.energy_demand import EnergyDemand
-from models.production_plan import ProductionPlanItem
-from fastapi import APIRouter
+from solver.solver import Solver
+from solver.from_scratch_solver_v1_1_0 import FromScratchSolver
+
 
 productionplan_router = APIRouter()
 
+solver = FromScratchSolver()
+
+# Dependency injection with FastAPI using Depends
+def get_solver() -> Solver:
+    return solver
 
 @productionplan_router.post("/productionplan", status_code=200)
-def post_production_plan(payload: EnergyDemand):
+def post_production_plan(energy_demand: EnergyDemand, solver = Depends(get_solver)):
     """
     This code defines a FastAPI endpoint that returns a ProductionPlan 
     according to the EnergyDemand.
@@ -40,9 +44,8 @@ def post_production_plan(payload: EnergyDemand):
         )
 
         # Create response
-        ppi1 = ProductionPlanItem(name="gasolinera",p=130)
-        productionPlan = [ppi1]
-        return productionPlan
+        production_plan = solver.production_plan(energy_demand)
+        return production_plan
 
     except TypeError as te:
         logging.getLogger(BS_CORRELATION_LOGGER).error(f"TypeError {te}")
