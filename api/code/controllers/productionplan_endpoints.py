@@ -14,20 +14,20 @@ from fastapi import HTTPException, APIRouter, Depends
 from config.constants import BS_CORRELATION_LOGGER
 from config.traceability import generate_correlation_id
 from models.energy_demand import EnergyDemand
-from solver.solver import Solver
-from solver.from_scratch_solver_v1_1_0 import FromScratchSolver
+from planner.planner import Planner
+from planner.planner_impl import PlannerImpl
 
 
 productionplan_router = APIRouter()
 
-solver = FromScratchSolver()
+planner = PlannerImpl()
 
 # Dependency injection with FastAPI using Depends
-def get_solver() -> Solver:
-    return solver
+def get_planner() -> Planner:
+    return planner
 
 @productionplan_router.post("/productionplan", status_code=200)
-def post_production_plan(energy_demand: EnergyDemand, solver = Depends(get_solver)):
+def post_production_plan(energy_demand: EnergyDemand, planner = Depends(get_planner)):
     """
     This code defines a FastAPI endpoint that returns a ProductionPlan 
     according to the EnergyDemand.
@@ -44,7 +44,7 @@ def post_production_plan(energy_demand: EnergyDemand, solver = Depends(get_solve
         )
 
         # Create response
-        production_plan = solver.production_plan(energy_demand)
+        production_plan = planner.production_plan(energy_demand)
         return production_plan
 
     except TypeError as te:

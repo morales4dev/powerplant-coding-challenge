@@ -1,5 +1,5 @@
 """
-    This class provide the abstraction of some data sructures using pydantic library.
+    This class provide the abstraction of some response data sructures using pydantic library.
 """
 
 

@@ -1,5 +1,5 @@
 """
-    This class provide the abstraction of the payload messages received from FUTURA API using pydantic library.
+    This class provide the abstraction of the responses sent back to the client using pydantic library.
 
 
 
