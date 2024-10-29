@@ -15,8 +15,10 @@ class ProductionPlanBuilderImpl(ProductionPlanBuilder):
         super().__init__()
         self._logger = logging.getLogger(BS_LOGGER)
 
-    def from_problem_result(self, problem_result: ProblemResult) -> list[ProductionPlanItem]:
-        ##
-        ppi1 = ProductionPlanItem(name="gasolinera", p=130)
-        productionPlan = [ppi1]
-        return productionPlan
+    def from_problem_result(self, powerplant_names: list[str], problem_result: ProblemResult) -> list[ProductionPlanItem]:
+        result_matrix = problem_result.solution
+        production_plan = []
+        for n in range(len(result_matrix)):
+            production_plan_item = ProductionPlanItem(name=powerplant_names[n],p=result_matrix[n])
+            production_plan.append(production_plan_item)
+        return production_plan

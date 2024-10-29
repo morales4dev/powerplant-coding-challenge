@@ -12,18 +12,18 @@ from abc import ABC, abstractmethod
 from config.constants import BS_LOGGER
 
 class LinearProgrammingProblem():
-    def __init__(self, objective_function=None, contraint_matrix=None, constraint_vector=None, bounds=None):
+    def __init__(self, objective_function=None, constraint_matrix=None, constraint_vector=None, bounds=None):
         """Linear programming problem (simplyfied) data sructure.
 
         Parameters
             ----------
             objective_function : 1-D array
                 The coefficients of the linear objective function to be minimized.
-            contraint_matrix : 2-D array, optional
-                The equality constraint matrix. Each row of ``contraint_matrix`` specifies the
+            constraint_matrix : 2-D array, optional
+                The equality constraint matrix. Each row of ``constraint_matrix`` specifies the
                 coefficients of a linear equality constraint on ``x``.
             constraint_vector : 1-D array, optional
-                The equality constraint vector. Each element of ``contraint_matrix @ x`` must equal
+                The equality constraint vector. Each element of ``constraint_matrix @ x`` must equal
                 the corresponding element of ``constraint_vector``.
             bounds : sequence, optional
                 A sequence of ``(min, max)`` pairs for each element in ``x``, defining
@@ -33,7 +33,7 @@ class LinearProgrammingProblem():
         """    
         self._logger = logging.getLogger(BS_LOGGER)
         self.objective_function = objective_function
-        self.contraint_matrix = contraint_matrix
+        self.constraint_matrix = constraint_matrix
         self.constraint_vector = constraint_vector
         self.bounds = bounds
 

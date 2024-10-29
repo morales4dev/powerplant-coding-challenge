@@ -11,10 +11,11 @@ class ProductionPlanBuilder(ABC):
         self._logger = logging.getLogger(BS_LOGGER)
 
     @abstractmethod
-    def from_problem_result(self, problem_result: ProblemResult) -> list[ProductionPlanItem]:
+    def from_problem_result(self, powerplant_names: list[str], problem_result: ProblemResult) -> list[ProductionPlanItem]:
         """Gets a production plan, given a linear programming problem result.
 
         Parameters:
+        powerplant_names: array of powerplant names
         problem_result (ProblemResult): linear programming problem result.
 
         Returns:

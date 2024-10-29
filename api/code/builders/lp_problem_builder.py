@@ -1,5 +1,6 @@
 import logging
 from abc import ABC, abstractmethod
+from typing import Tuple
 
 from config.constants import BS_LOGGER
 from models.linear_programming import LinearProgrammingProblem
@@ -11,7 +12,7 @@ class LinearProgrammingProblemBuilder(ABC):
         self._logger = logging.getLogger(BS_LOGGER)
 
     @abstractmethod
-    def from_energy_demand(self, demand: EnergyDemand) -> LinearProgrammingProblem:
+    def from_energy_demand(self, demand: EnergyDemand) -> Tuple[list[str], LinearProgrammingProblem]:
         """Gets a linear programming problem, given an energy demand.
 
         Parameters:

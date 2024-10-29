@@ -8,7 +8,7 @@ from models.production_plan import ProductionPlanItem
 from models.linear_programming import LinearProgrammingProblem, ProblemResult
 from builders.lp_problem_builder import LinearProgrammingProblemBuilder
 from builders.production_plan_builder import ProductionPlanBuilder
-
+from exceptions.exceptions import SolverException, PlannerException
 
 class PlannerImpl(Planner):
     def __init__(self, 
@@ -22,7 +22,16 @@ class PlannerImpl(Planner):
         self._production_plan_builder = production_plan_builder
 
     def production_plan(self, demand: EnergyDemand) -> list[ProductionPlanItem] :
-        lp_problem = self._lp_problem_builder.from_energy_demand(demand)
-        problem_result = self._solver.solve(lp_problem)
-        productionPlan = self._production_plan_builder.from_problem_result(problem_result)
+        productionPlan = None
+        try:
+            powerplant_names, lp_problem = self._lp_problem_builder.from_energy_demand(demand)
+            problem_result = self._solver.solve(lp_problem)
+            productionPlan = self._production_plan_builder.from_problem_result(
+                powerplant_names=powerplant_names, 
+                problem_result=problem_result
+            )
+        except SolverException as se:
+            raise PlannerException(se)
+        except Exception as e:
+            raise e
         return productionPlan

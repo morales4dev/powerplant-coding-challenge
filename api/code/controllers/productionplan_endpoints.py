@@ -15,12 +15,13 @@ from config.constants import BS_CORRELATION_LOGGER
 from config.traceability import generate_correlation_id
 from models.energy_demand import EnergyDemand
 from planner.planner import Planner
-from planner.planner_impl import PlannerImpl
-
+from planner.planner_factory_impl import PlannerFactoryImpl
+from exceptions.exceptions import PlannerException
 
 productionplan_router = APIRouter()
 
-planner = PlannerImpl()
+planner_factory = PlannerFactoryImpl()
+planner = planner_factory.create_planner()
 
 # Dependency injection with FastAPI using Depends
 def get_planner() -> Planner:
@@ -46,6 +47,13 @@ def post_production_plan(energy_demand: EnergyDemand, planner = Depends(get_plan
         # Create response
         production_plan = planner.production_plan(energy_demand)
         return production_plan
+
+    except PlannerException as pe:
+        logging.getLogger(BS_CORRELATION_LOGGER).error(f"Planner Exception {pe}")
+        raise HTTPException(
+            status_code=400,
+            detail=f"BadRequest. {pe}",
+        )
 
     except TypeError as te:
         logging.getLogger(BS_CORRELATION_LOGGER).error(f"TypeError {te}")
