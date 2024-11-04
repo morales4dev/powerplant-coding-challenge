@@ -14,3 +14,7 @@ class SolverException(BSError):
 class PlannerException(BSError):
     def __init__(self, arg):
         super(PlannerException, self).__init__(code='BS_0002', arg=arg)
+
+class BuilderException(BSError):
+    def __init__(self, arg):
+        super(BuilderException, self).__init__(code='BS_0003', arg=arg)        
