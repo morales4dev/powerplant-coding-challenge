@@ -21,3 +21,8 @@ pip install -r requirements.txt
 ## How to run
 cd $REPO_BASE_PATH/api/code
 python3 run_server.py
+
+### with Docker
+cd $REPO_BASE_PATH/api
+docker build -t powerplanner . 
+docker run -p 8888:8888 docker.io/library/powerplanner
